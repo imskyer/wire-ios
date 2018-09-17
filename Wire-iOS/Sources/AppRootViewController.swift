@@ -176,8 +176,9 @@ var defaultFontScheme: FontScheme = FontScheme(contentSizeCategory: UIApplicatio
             transitionGroup.enter()
 
             DispatchQueue.main.async {
-                self.applicationWillTransition(to: appState)
-                transitionGroup.leave()
+                self.applicationWillTransition(to: appState, completionHandler: {
+                    transitionGroup.leave()
+                })
             }
 
             transitionGroup.wait()
@@ -334,7 +335,7 @@ var defaultFontScheme: FontScheme = FontScheme(contentSizeCategory: UIApplicatio
         }
     }
 
-    func applicationWillTransition(to appState: AppState) {
+    func applicationWillTransition(to appState: AppState, completionHandler: @escaping () -> Void) {
 
         if appState == .authenticated(completedRegistration: false) {
             callWindow.callController.transitionToLoggedInSession()
@@ -361,6 +362,7 @@ var defaultFontScheme: FontScheme = FontScheme(contentSizeCategory: UIApplicatio
             return true
         default:
             return false
+        }
     }
     
     func applicationDidTransition(to appState: AppState) {
